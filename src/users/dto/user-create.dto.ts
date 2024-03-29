@@ -28,7 +28,7 @@ export class CreateUserDto {
   @IsString()
   @MaxLength(12)
   @IsNumberString()
-  citizenId: number;
+  citizenId: string;
 
   @IsDateString()
   dateOfBirth: string;
