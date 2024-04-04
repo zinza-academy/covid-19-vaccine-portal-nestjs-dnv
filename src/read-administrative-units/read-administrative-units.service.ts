@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Command, Console } from 'nestjs-console';
-import dataSource from 'src/database/data.source';
-import { District } from 'src/districts/entities/districts.entity';
-import { Province } from 'src/provinces/entities/provinces.entity';
-import { Ward } from 'src/wards/entities/wards.entity';
 import * as ExcelJS from 'exceljs';
+import { Command, Console } from 'nestjs-console';
 import * as path from 'path';
+import dataSource from 'src/database/data.source';
+import { Ward } from 'src/wards/entities/wards.entity';
 
 type ProvinceType = {
   id: number;
@@ -34,7 +32,6 @@ export class ReadAdministrativeUnitsService {
     description: 'Read Administrative Units data from xlsx',
   })
   async readAdministrativeData() {
-    console.log('Read data from xlsx');
     const workbook = new ExcelJS.Workbook();
     const provinces: ProvinceType[] = [];
     const districts: DistrictType[] = [];
@@ -75,17 +72,5 @@ export class ReadAdministrativeUnitsService {
         });
       });
     });
-    console.table(wards);
-
-    await dataSource.initialize();
-
-    await dataSource
-      .createQueryBuilder()
-      .insert()
-      .into(Ward)
-      .values(wards)
-      .execute();
-
-    console.log('Complete read data from xlsx');
   }
 }
