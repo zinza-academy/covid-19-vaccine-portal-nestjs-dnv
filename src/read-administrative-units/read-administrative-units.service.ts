@@ -15,7 +15,9 @@ type ProvinceType = {
 type DistrictType = {
   id: number;
   name: string;
-  provinceId: number;
+  province: {
+    id: number;
+  };
 };
 
 type WardType = {
@@ -59,7 +61,9 @@ export class ReadAdministrativeUnitsService {
           districts.push({
             id: Number(row.getCell(4).value),
             name: (row.getCell(3).value as string) || 'Huyện X',
-            provinceId: Number(row.getCell(2).value),
+            province: {
+              id: Number(row.getCell(2).value),
+            },
           });
         if (
           wards.length === 0 ||
@@ -75,11 +79,12 @@ export class ReadAdministrativeUnitsService {
 
     await dataSource.initialize();
 
+    console.table(districts);
     await dataSource
       .createQueryBuilder()
       .insert()
-      .into(Province)
-      .values(provinces)
+      .into(District)
+      .values(districts)
       .execute();
 
     console.log('Complete read data from xlsx');
