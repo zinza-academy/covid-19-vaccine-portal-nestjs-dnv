@@ -1,5 +1,5 @@
 import { BootstrapConsole } from 'nestjs-console';
-import { ReadAdministrativeUnitsModule } from './read-administrative-units/read-administrative-units.module';
+import { ReadAdministrativeUnitsModule } from './modules/read-administrative-units/read-administrative-units.module';
 
 const bootstrap = new BootstrapConsole({
   module: ReadAdministrativeUnitsModule,

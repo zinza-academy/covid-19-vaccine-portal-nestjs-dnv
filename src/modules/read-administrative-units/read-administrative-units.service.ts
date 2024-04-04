@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
 import { Command, Console } from 'nestjs-console';
 import * as path from 'path';
-import dataSource from 'src/database/data.source';
-import { Ward } from 'src/wards/entities/wards.entity';
+import dataSource from 'src/modules/database/data.source';
+import { Ward } from 'src/modules/wards/entities/wards.entity';
 
 type ProvinceType = {
   id: number;

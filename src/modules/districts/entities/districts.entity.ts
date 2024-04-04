@@ -1,5 +1,5 @@
-import { Province } from 'src/provinces/entities/provinces.entity';
-import { Ward } from 'src/wards/entities/wards.entity';
+import { Province } from 'src/modules/provinces/entities/provinces.entity';
+import { Ward } from 'src/modules/wards/entities/wards.entity';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()

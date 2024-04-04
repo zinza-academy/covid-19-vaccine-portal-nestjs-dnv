@@ -1,4 +1,4 @@
-import { District } from 'src/districts/entities/districts.entity';
+import { District } from 'src/modules/districts/entities/districts.entity';
 import {
   Column,
   Entity,
