@@ -7,6 +7,7 @@ import { DistrictsModule } from './districts/districts.module';
 import { ProvincesModule } from './provinces/provinces.module';
 import { UsersModule } from './users/users.module';
 import { WardsModule } from './wards/wards.module';
+import { ReadAdministrativeUnitsModule } from './read-administrative-units/read-administrative-units.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { WardsModule } from './wards/wards.module';
     DistrictsModule,
     WardsModule,
     DatabaseModule,
+    ReadAdministrativeUnitsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

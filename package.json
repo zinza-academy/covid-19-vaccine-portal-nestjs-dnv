@@ -21,7 +21,8 @@
     "migration:run": "typeorm migration:run -d dist/src/database/data.source.js",
     "migration:generate": "typeorm migration:generate -d dist/src/database/data.source.js",
     "migration:revert": "typeorm migration:revert -d dist/src/database/data.source.js",
-    "migration:show": "typeorm migration:show -d dist/src/database/data.source.js"
+    "migration:show": "typeorm migration:show -d dist/src/database/data.source.js",
+    "console:dev": "ts-node -r tsconfig-paths/register src/console.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
