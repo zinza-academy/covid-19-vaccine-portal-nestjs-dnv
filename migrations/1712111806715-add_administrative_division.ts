@@ -12,8 +12,6 @@ export class AddAdministrativeDivision1712111806715 implements MigrationInterfac
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "ward" DROP CONSTRAINT "FK_19a3bc9b3be291e8b9bc2bb623b"`);
-        await queryRunner.query(`ALTER TABLE "district" DROP CONSTRAINT "FK_23a21b38208367a242b1dd3a424"`);
         await queryRunner.query(`DROP TABLE "ward"`);
         await queryRunner.query(`DROP TABLE "district"`);
         await queryRunner.query(`DROP TABLE "province"`);
