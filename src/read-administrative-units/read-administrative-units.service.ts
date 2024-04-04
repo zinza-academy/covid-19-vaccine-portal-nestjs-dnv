@@ -21,9 +21,10 @@ type DistrictType = {
 };
 
 type WardType = {
-  id: number;
   name: string;
-  districtId: number;
+  district: {
+    id: number;
+  };
 };
 @Injectable()
 @Console()
@@ -65,26 +66,24 @@ export class ReadAdministrativeUnitsService {
               id: Number(row.getCell(2).value),
             },
           });
-        if (
-          wards.length === 0 ||
-          Number(row.getCell(6).value) !== wards[wards.length - 1].id
-        )
-          wards.push({
-            id: Number(row.getCell(6).value),
-            name: (row.getCell(5).value as string) || 'Xã X',
-            districtId: Number(row.getCell(4).value),
-          });
+
+        wards.push({
+          name: (row.getCell(5).value as string) || 'Xã X',
+          district: {
+            id: Number(row.getCell(4).value),
+          },
+        });
       });
     });
+    console.table(wards);
 
     await dataSource.initialize();
 
-    console.table(districts);
     await dataSource
       .createQueryBuilder()
       .insert()
-      .into(District)
-      .values(districts)
+      .into(Ward)
+      .values(wards)
       .execute();
 
     console.log('Complete read data from xlsx');
