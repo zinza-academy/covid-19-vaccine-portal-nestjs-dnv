@@ -1,4 +1,3 @@
-import { District } from 'src/modules/districts/entities/districts.entity';
 import {
   Column,
   Entity,
@@ -6,6 +5,7 @@ import {
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { District } from './districts.entity';
 
 @Entity()
 export class Ward {

@@ -9,7 +9,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { Gender } from '../entities/users.entity';
+import { Gender } from '../../../entities/users.entity';
 
 export class CreateUserDto {
   @IsNotEmpty()
