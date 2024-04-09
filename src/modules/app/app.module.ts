@@ -8,6 +8,7 @@ import { ProvincesModule } from '../provinces/provinces.module';
 import { UsersModule } from '../users/users.module';
 import { WardsModule } from '../wards/wards.module';
 import { ReadAdministrativeUnitsModule } from '../read-administrative-units/read-administrative-units.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ReadAdministrativeUnitsModule } from '../read-administrative-units/read
     WardsModule,
     DatabaseModule,
     ReadAdministrativeUnitsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

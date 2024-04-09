@@ -20,7 +20,7 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOneById(id: number) {
     const user = await this.usersRepository.findOneBy({
       id,
     });
@@ -28,6 +28,16 @@ export class UsersService {
       throw new NotFoundException('user not found');
     }
 
+    return user;
+  }
+
+  async findOneByEmail(email: string) {
+    const user = this.usersRepository.findOneBy({
+      email,
+    });
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
     return user;
   }
 
@@ -54,7 +64,7 @@ export class UsersService {
   }
 
   async deleteOne(id: number) {
-    const user = await this.findOne(id);
+    const user = await this.findOneById(id);
     if (!user) {
       throw new NotFoundException('User not found');
     }
