@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Ward } from './wards.entity';
 
 export enum Gender {
   MALE = 'M',
@@ -33,14 +34,8 @@ export class Users {
   @Column()
   citizenId: string;
 
-  @Column()
-  city: string;
-
-  @Column()
-  district: string;
-
-  @Column()
-  ward: string;
+  @ManyToOne(() => Ward, (Ward) => Ward.users)
+  ward: Ward;
 
   @Column({ type: 'boolean', default: false })
   isAdmin: boolean;

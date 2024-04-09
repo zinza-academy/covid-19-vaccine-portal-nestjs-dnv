@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsNumberString,
   IsString,
   MaxLength,
@@ -36,14 +37,9 @@ export class CreateUserDto {
   @IsEnum(Gender)
   gender: string;
 
-  @IsString()
-  city: string;
-
-  @IsString()
-  district: string;
-
-  @IsString()
-  ward: string;
+  @IsNotEmpty()
+  @IsNumber()
+  ward: number;
 
   @IsBoolean()
   isAdmin: boolean;

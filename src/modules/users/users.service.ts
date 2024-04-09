@@ -39,7 +39,7 @@ export class UsersService {
     if (existingUser)
       throw new ConflictException('This email is already used!');
 
-    return this.usersRepository.save(createUserDto);
+    return 'create user';
   }
 
   async updateOne(id: number, updateUserDto: UpdateUserDto) {
@@ -50,12 +50,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    await this.usersRepository.update(id, updateUserDto);
-    const updatedUser = await this.usersRepository.findOneBy({
-      id,
-    });
-
-    return updatedUser;
+    return 'update user';
   }
 
   async deleteOne(id: number) {
