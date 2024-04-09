@@ -6,11 +6,11 @@ import { Request } from 'express';
 import { JWT_ACCESS_TOKEN_KEY } from '../constants';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
-        JwtStrategy.extractJWTFromCookie,
+        JwtAccessTokenStrategy.extractJWTFromCookie,
       ]),
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET,
