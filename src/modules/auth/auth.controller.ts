@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Post,
   Req,
   Request,
@@ -40,6 +41,16 @@ export class AuthController {
   @Post('sign-up')
   async signUp(@Body() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto);
+  }
+
+  @HttpCode(200)
+  @Public()
+  @Post('logout')
+  async logOut(@Res({ passthrough: true }) res: Response) {
+    res.cookie(JWT_ACCESS_TOKEN_KEY, '', {
+      maxAge: 0,
+    });
+    return { message: 'logout successful' };
   }
 
   @UseGuards(JwtAccessTokenGuard)
