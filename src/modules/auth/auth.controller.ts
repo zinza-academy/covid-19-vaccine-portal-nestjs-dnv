@@ -1,10 +1,21 @@
-import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Request,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { SignUpDto } from './dto/signUp.dto';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { JWT_ACCESS_TOKEN_KEY } from './constants';
+import { JwtAccessTokenGuard } from './guards/jwt-access-token.guard';
+import { Public } from './decorators/isPublic.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -29,5 +40,11 @@ export class AuthController {
   @Post('sign-up')
   async signUp(@Body() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto);
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return 'profile';
   }
 }
