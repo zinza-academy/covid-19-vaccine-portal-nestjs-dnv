@@ -1,3 +1,4 @@
+import { SignUpDto } from '../auth/dto/signUp.dto';
 import {
   ConflictException,
   Injectable,
@@ -41,15 +42,10 @@ export class UsersService {
     return user;
   }
 
-  async createOne(createUserDto: CreateUserDto) {
-    const existingUser = await this.usersRepository.findOneBy({
-      email: createUserDto.email,
-    });
-
-    if (existingUser)
-      throw new ConflictException('This email is already used!');
-
-    return 'create user';
+  async createOne(signUpDto: SignUpDto) {
+    const user = await this.usersRepository.create(signUpDto);
+    await this.usersRepository.save(user);
+    return user;
   }
 
   async updateOne(id: number, updateUserDto: UpdateUserDto) {

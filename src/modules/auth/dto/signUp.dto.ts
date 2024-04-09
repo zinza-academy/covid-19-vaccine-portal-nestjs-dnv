@@ -9,8 +9,10 @@ import {
   IsEnum,
   IsNumber,
   IsBoolean,
+  IsOptional,
 } from 'class-validator';
 import { Gender } from 'src/entities/users.entity';
+import { Ward } from 'src/entities/wards.entity';
 
 export class SignUpDto {
   @IsNotEmpty()
@@ -39,8 +41,9 @@ export class SignUpDto {
 
   @IsNotEmpty()
   @IsNumber()
-  ward: number;
+  ward: Ward;
 
+  @IsOptional()
   @IsBoolean()
   isAdmin: boolean;
 }

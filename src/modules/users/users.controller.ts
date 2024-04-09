@@ -26,12 +26,6 @@ export class UsersController {
     return user;
   }
 
-  @Post()
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    const createdUser = await this.usersService.createOne(createUserDto);
-    return createdUser;
-  }
-
   @Patch(':id')
   async updateUser(
     @Param('id') id: number,
