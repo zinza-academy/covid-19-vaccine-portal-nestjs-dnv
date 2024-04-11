@@ -20,26 +20,20 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
-    try {
-      const existedUser = await this.usersService.findOneByEmail(
-        signUpDto.email,
-      );
+    const existedUser = await this.usersService.findOneByEmail(signUpDto.email);
 
-      if (existedUser) {
-        throw new ConflictException('email already exists');
-      }
-
-      const hashedPassword = await bcrypt.hash(signUpDto.password, 10);
-
-      const newUser = await this.usersService.createOne({
-        ...signUpDto,
-        password: hashedPassword,
-      });
-
-      return newUser;
-    } catch (error) {
-      throw error;
+    if (existedUser) {
+      throw new ConflictException('email already exists');
     }
+
+    const hashedPassword = await bcrypt.hash(signUpDto.password, 10);
+
+    const newUser = await this.usersService.createOne({
+      ...signUpDto,
+      password: hashedPassword,
+    });
+
+    return newUser;
   }
 
   async login(loginDto: LoginDto) {
@@ -60,18 +54,14 @@ export class AuthService {
   }
 
   async getAuthenticatedUser(email: string, password: string) {
-    try {
-      const user = await this.usersService.findOneByEmail(email);
+    const user = await this.usersService.findOneByEmail(email);
 
-      if (!user) {
-        return null;
-      }
-      await this.comparePassword(password, user.password);
-
-      return user;
-    } catch (error) {
-      throw new BadRequestException('Wrong credentials!!');
+    if (!user) {
+      return null;
     }
+    await this.comparePassword(password, user.password);
+
+    return user;
   }
 
   async comparePassword(password: string, hashedPassword: string) {
