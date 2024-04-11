@@ -28,14 +28,14 @@ export class AuthController {
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const { accessToken, user } = await this.authService.login(loginDto);
+    const { accessToken } = await this.authService.login(loginDto);
 
     response.cookie(JWT_ACCESS_TOKEN_KEY, accessToken, {
       httpOnly: true,
       secure: true,
     });
 
-    return user;
+    return { success: true, message: 'Login successful' };
   }
 
   @Post('sign-up')

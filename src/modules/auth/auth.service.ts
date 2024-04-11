@@ -48,9 +48,7 @@ export class AuthService {
     };
     const accessToken = this.generateAccessToken(payload);
 
-    const { password, ...userWithoutPassword } = user;
-
-    return { user: userWithoutPassword, accessToken: accessToken };
+    return { accessToken: accessToken };
   }
 
   async getAuthenticatedUser(email: string, password: string) {
