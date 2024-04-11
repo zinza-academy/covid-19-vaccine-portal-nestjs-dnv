@@ -4,25 +4,22 @@ import {
   Get,
   HttpCode,
   Post,
-  Req,
   Request,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { SignUpDto } from './dto/signUp.dto';
-import { AuthService } from './auth.service';
 import { Response } from 'express';
+import { AuthService } from './auth.service';
 import { JWT_ACCESS_TOKEN_KEY } from './constants';
-import { JwtAccessTokenGuard } from './guards/jwt-access-token.guard';
 import { Public } from './decorators/isPublic.decorator';
+import { LoginDto } from './dto/login.dto';
+import { SignUpDto } from './dto/signUp.dto';
+import { JwtAccessTokenGuard } from './guards/jwt-access-token.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
     @Body() loginDto: LoginDto,

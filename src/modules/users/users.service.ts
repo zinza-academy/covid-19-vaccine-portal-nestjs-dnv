@@ -36,9 +36,7 @@ export class UsersService {
     const user = this.usersRepository.findOneBy({
       email,
     });
-    if (!user) {
-      throw new NotFoundException('user not found');
-    }
+
     return user;
   }
 
