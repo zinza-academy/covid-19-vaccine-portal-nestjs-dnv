@@ -1,13 +1,14 @@
 import 'dotenv/config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { JWT_ACCESS_TOKEN_KEY } from '../constants';
+import { UsersService } from 'src/modules/users/users.service';
 
 @Injectable()
 export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly userService: UsersService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         JwtAccessTokenStrategy.extractJWTFromCookie,
@@ -18,7 +19,13 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    return { userId: payload.sub, email: payload.email };
+    const { id, email } = payload;
+    const user = await this.userService.findOneById(id);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid token');
+    }
+    return { userId: id, email };
   }
 
   private static extractJWTFromCookie(req: Request): string | null {

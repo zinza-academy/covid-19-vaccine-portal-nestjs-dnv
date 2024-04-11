@@ -48,6 +48,7 @@ export class AuthService {
       id: user.id,
       fullName: user.fullName,
       isAdmin: user.isAdmin,
+      email: user.email,
     };
     const accessToken = this.generateAccessToken(payload);
 
