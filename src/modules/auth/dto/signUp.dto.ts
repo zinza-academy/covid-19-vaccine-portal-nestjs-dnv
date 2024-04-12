@@ -1,18 +1,20 @@
 import {
-  IsBoolean,
-  IsDateString,
-  IsEmail,
-  IsEnum,
   IsNotEmpty,
-  IsNumber,
-  IsNumberString,
   IsString,
   MaxLength,
+  IsEmail,
   MinLength,
+  IsNumberString,
+  IsDateString,
+  IsEnum,
+  IsNumber,
+  IsBoolean,
+  IsOptional,
 } from 'class-validator';
-import { Gender } from '../../../entities/users.entity';
+import { Gender } from 'src/entities/users.entity';
+import { Ward } from 'src/entities/wards.entity';
 
-export class CreateUserDto {
+export class SignUpDto {
   @IsNotEmpty()
   @IsString()
   @MaxLength(50)
@@ -39,8 +41,9 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsNumber()
-  ward: number;
+  ward: Ward;
 
+  @IsOptional()
   @IsBoolean()
   isAdmin: boolean;
 }

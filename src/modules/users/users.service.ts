@@ -1,3 +1,4 @@
+import { SignUpDto } from '../auth/dto/signUp.dto';
 import {
   ConflictException,
   Injectable,
@@ -5,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Users } from './entities/users.entity';
+import { Users } from '../../entities/users.entity';
 import { CreateUserDto } from './dto/user-create.dto';
 import { UpdateUserDto } from './dto/user-update.dto';
 
@@ -20,7 +21,7 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOneById(id: number) {
     const user = await this.usersRepository.findOneBy({
       id,
     });
@@ -31,15 +32,18 @@ export class UsersService {
     return user;
   }
 
-  async createOne(createUserDto: CreateUserDto) {
-    const existingUser = await this.usersRepository.findOneBy({
-      email: createUserDto.email,
+  async findOneByEmail(email: string) {
+    const user = this.usersRepository.findOneBy({
+      email,
     });
 
-    if (existingUser)
-      throw new ConflictException('This email is already used!');
+    return user;
+  }
 
-    return this.usersRepository.save(createUserDto);
+  async createOne(signUpDto: SignUpDto) {
+    const user = await this.usersRepository.create(signUpDto);
+    await this.usersRepository.save(user);
+    return user;
   }
 
   async updateOne(id: number, updateUserDto: UpdateUserDto) {
@@ -50,16 +54,11 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    await this.usersRepository.update(id, updateUserDto);
-    const updatedUser = await this.usersRepository.findOneBy({
-      id,
-    });
-
-    return updatedUser;
+    return 'update user';
   }
 
   async deleteOne(id: number) {
-    const user = await this.findOne(id);
+    const user = await this.findOneById(id);
     if (!user) {
       throw new NotFoundException('User not found');
     }

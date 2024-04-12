@@ -1,5 +1,5 @@
-import { District } from 'src/modules/districts/entities/districts.entity';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { District } from './districts.entity';
 
 @Entity()
 export class Province {
