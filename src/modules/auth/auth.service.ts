@@ -26,14 +26,12 @@ export class AuthService {
       throw new ConflictException('email already exists');
     }
 
-    const hashedPassword = await bcrypt.hash(signUpDto.password, 10);
+    const hashedPassword = await this.hashPassword(signUpDto.password);
 
-    const newUser = await this.usersService.createOne({
+    return this.usersService.createOne({
       ...signUpDto,
       password: hashedPassword,
     });
-
-    return newUser;
   }
 
   async login(loginDto: LoginDto) {

@@ -37,7 +37,9 @@ export class AuthController {
 
   @Post('sign-up')
   async signUp(@Body() signUpDto: SignUpDto) {
-    return this.authService.signUp(signUpDto);
+    await this.authService.signUp(signUpDto);
+
+    return { success: true, message: 'Signup successful' };
   }
 
   @HttpCode(200)
