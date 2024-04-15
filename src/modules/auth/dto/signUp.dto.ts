@@ -10,6 +10,7 @@ import {
   IsNumber,
   IsBoolean,
   IsOptional,
+  Length,
 } from 'class-validator';
 import { Gender } from 'src/entities/users.entity';
 import { Ward } from 'src/entities/wards.entity';
@@ -28,8 +29,8 @@ export class SignUpDto {
   @MinLength(8)
   password: string;
 
-  @IsString()
-  @MaxLength(12)
+  @IsNotEmpty()
+  @Length(12, 12)
   @IsNumberString()
   citizenId: string;
 
