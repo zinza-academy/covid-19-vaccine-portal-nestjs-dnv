@@ -71,6 +71,11 @@ export class AuthService {
     if (!isCorrectPassword) throw new BadRequestException('invalid password');
   }
 
+  async hashPassword(password: string) {
+    const salt = this.configService.get('SALT_NUMBER');
+    return await bcrypt.hash(password, +salt);
+  }
+
   generateAccessToken(payload) {
     return this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_SECRET'),
