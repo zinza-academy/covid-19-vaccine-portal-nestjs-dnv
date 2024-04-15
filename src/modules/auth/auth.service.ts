@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signUp.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -53,6 +54,21 @@ export class AuthService {
     return { accessToken: accessToken };
   }
 
+  async sendPasswordResetEmail(forgotPasswordDto: ForgotPasswordDto) {
+    const user = await this.usersService.findOneByEmail(
+      forgotPasswordDto.email,
+    );
+    if (!user) throw new NotFoundException('user not found');
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+    };
+    const resetToken = this.generateResetPasswordToken(payload);
+
+    // sendResetPasswordEmail
+  }
+
   async getAuthenticatedUser(email: string, password: string) {
     const user = await this.usersService.findOneByEmail(email);
 
@@ -74,11 +90,20 @@ export class AuthService {
     return await bcrypt.hash(password, +salt);
   }
 
-  generateAccessToken(payload) {
+  private generateAccessToken(payload) {
     return this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_SECRET'),
       expiresIn: this.configService.get<string>(
         'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      ),
+    });
+  }
+
+  private generateResetPasswordToken(payload) {
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('JWT_SECRET'),
+      expiresIn: this.configService.get<string>(
+        'JWT_RESET_PASSWORD_TOKEN_EXPIRATION_TIME',
       ),
     });
   }
