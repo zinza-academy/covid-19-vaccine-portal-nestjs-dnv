@@ -11,6 +11,7 @@ import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +19,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private emailService: EmailService,
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
@@ -66,7 +68,7 @@ export class AuthService {
     };
     const resetToken = this.generateResetPasswordToken(payload);
 
-    // sendResetPasswordEmail
+    await this.emailService.sendResetPasswordEmail(user.email, resetToken);
   }
 
   async getAuthenticatedUser(email: string, password: string) {
