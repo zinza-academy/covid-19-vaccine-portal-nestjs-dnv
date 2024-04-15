@@ -9,6 +9,7 @@ import { UsersModule } from '../users/users.module';
 import { WardsModule } from '../wards/wards.module';
 import { ReadAdministrativeUnitsModule } from '../read-administrative-units/read-administrative-units.module';
 import { AuthModule } from '../auth/auth.module';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from '../auth/auth.module';
     DatabaseModule,
     ReadAdministrativeUnitsModule,
     AuthModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
