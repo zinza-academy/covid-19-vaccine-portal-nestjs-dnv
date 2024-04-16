@@ -40,6 +40,9 @@ export class SignUpDto {
   @IsEnum(Gender)
   gender: string;
 
+  @IsOptional()
+  refreshToken: string;
+
   @IsNotEmpty()
   @IsNumber()
   ward: Ward;

@@ -68,4 +68,15 @@ export class UsersService {
 
     await this.usersRepository.save(updatedUser);
   }
+
+  async setRefreshToken(id: number, refreshToken: string) {
+    return await this.usersRepository.update(
+      {
+        id,
+      },
+      {
+        refreshToken,
+      },
+    );
+  }
 }
