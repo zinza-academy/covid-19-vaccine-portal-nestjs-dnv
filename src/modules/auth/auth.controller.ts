@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
   Post,
   Request,
   Res,
@@ -16,6 +17,7 @@ import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { JwtAccessTokenGuard } from './guards/jwt-access-token.guard';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -63,5 +65,14 @@ export class AuthController {
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
     await this.authService.sendPasswordResetEmail(forgotPasswordDto);
     return { message: 'Email sent for password reset' };
+  }
+
+  @Post('reset-password/:token')
+  async resetPassword(
+    @Param('token') token: string,
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ) {
+    await this.authService.resetPassword(token, resetPasswordDto);
+    return { message: 'Password reset successful' };
   }
 }

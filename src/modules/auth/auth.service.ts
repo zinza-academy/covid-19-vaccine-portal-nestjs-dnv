@@ -1,17 +1,21 @@
 import {
   BadRequestException,
   ConflictException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { EmailService } from '../email/email.service';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -69,6 +73,23 @@ export class AuthService {
     const resetToken = this.generateResetPasswordToken(payload);
 
     await this.emailService.sendResetPasswordEmail(user.email, resetToken);
+  }
+
+  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto) {
+    try {
+      const validToken = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+      });
+      const user = await this.usersService.findOneById(validToken.id);
+      if (!user) {
+        throw new NotFoundException('user not found');
+      }
+    } catch (error) {
+      if (error instanceof JsonWebTokenError) {
+        throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+      }
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 
   async getAuthenticatedUser(email: string, password: string) {
