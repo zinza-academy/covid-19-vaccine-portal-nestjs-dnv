@@ -69,7 +69,7 @@ export class UsersService {
     await this.usersRepository.save(updatedUser);
   }
 
-  async setResetToken(id: number, resetToken: string) {
+  async setResetToken(id: number, resetToken: string | null) {
     return await this.usersRepository.update(
       {
         id,
@@ -78,5 +78,13 @@ export class UsersService {
         resetToken,
       },
     );
+  }
+
+  async findResetToken(id: number) {
+    const user = await this.usersRepository.findOneBy({
+      id,
+    });
+
+    return user.resetToken;
   }
 }

@@ -83,16 +83,28 @@ export class AuthService {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
       const user = await this.usersService.findOneById(validToken.id);
+
+      const resetToken = await this.usersService.findResetToken(user.id);
+      if (!resetToken) {
+        throw new UnauthorizedException('Reset token has already been used');
+      }
+
       if (!user) {
         throw new NotFoundException('user not found');
       }
+
       const newHashPassword = await this.hashPassword(
         resetPasswordDto.password,
       );
 
       await this.usersService.updatePassword(user.id, newHashPassword);
+      // remove resetToken from database
+      await this.usersService.setResetToken(user.id, null);
     } catch (error) {
-      if (error instanceof JsonWebTokenError) {
+      if (
+        error instanceof JsonWebTokenError ||
+        error.response.error === 'Unauthorized'
+      ) {
         throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
       }
       throw new HttpException(
