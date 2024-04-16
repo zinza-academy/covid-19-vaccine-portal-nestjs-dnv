@@ -41,7 +41,7 @@ export class SignUpDto {
   gender: string;
 
   @IsOptional()
-  refreshToken: string;
+  resetToken: string;
 
   @IsNotEmpty()
   @IsNumber()

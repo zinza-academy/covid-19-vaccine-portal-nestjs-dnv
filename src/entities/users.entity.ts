@@ -34,7 +34,7 @@ export class Users {
 
   @Column({ nullable: true })
   @IsOptional()
-  refreshToken: string;
+  resetToken: string;
 
   @Column()
   citizenId: string;

@@ -72,7 +72,7 @@ export class AuthService {
     };
     const resetToken = this.generateResetPasswordToken(payload);
 
-    await this.usersService.setRefreshToken(user.id, resetToken);
+    await this.usersService.setResetToken(user.id, resetToken);
 
     await this.emailService.sendResetPasswordEmail(user.email, resetToken);
   }
