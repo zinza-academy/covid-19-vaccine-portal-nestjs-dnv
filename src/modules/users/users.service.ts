@@ -61,4 +61,11 @@ export class UsersService {
     }
     return this.usersRepository.remove(user);
   }
+
+  async updatePassword(id: number, newHashPassword: string) {
+    const updatedUser = await this.findOneById(id);
+    updatedUser.password = newHashPassword;
+
+    await this.usersRepository.save(updatedUser);
+  }
 }

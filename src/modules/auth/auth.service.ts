@@ -84,11 +84,19 @@ export class AuthService {
       if (!user) {
         throw new NotFoundException('user not found');
       }
+      const newHashPassword = await this.hashPassword(
+        resetPasswordDto.password,
+      );
+
+      await this.usersService.updatePassword(user.id, newHashPassword);
     } catch (error) {
       if (error instanceof JsonWebTokenError) {
         throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
       }
-      throw new UnauthorizedException('Invalid token');
+      throw new HttpException(
+        'Something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
