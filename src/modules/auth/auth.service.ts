@@ -1,15 +1,21 @@
 import {
   BadRequestException,
   ConflictException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/signUp.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { EmailService } from '../email/email.service';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +23,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private emailService: EmailService,
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
@@ -53,6 +60,60 @@ export class AuthService {
     return { accessToken: accessToken };
   }
 
+  async sendPasswordResetEmail(forgotPasswordDto: ForgotPasswordDto) {
+    const user = await this.usersService.findOneByEmail(
+      forgotPasswordDto.email,
+    );
+    if (!user) throw new NotFoundException('user not found');
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+    };
+    const resetToken = this.generateResetPasswordToken(payload);
+
+    await this.usersService.setResetToken(user.id, resetToken);
+
+    await this.emailService.sendResetPasswordEmail(user.email, resetToken);
+  }
+
+  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto) {
+    try {
+      const validToken = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+      });
+      const user = await this.usersService.findOneById(validToken.id);
+
+      const resetToken = await this.usersService.findResetToken(user.id);
+      if (!resetToken) {
+        throw new UnauthorizedException('Reset token has already been used');
+      }
+
+      if (!user) {
+        throw new NotFoundException('user not found');
+      }
+
+      const newHashPassword = await this.hashPassword(
+        resetPasswordDto.password,
+      );
+
+      await this.usersService.updatePassword(user.id, newHashPassword);
+      // remove resetToken from database
+      await this.usersService.setResetToken(user.id, null);
+    } catch (error) {
+      if (
+        error instanceof JsonWebTokenError ||
+        error.response.error === 'Unauthorized'
+      ) {
+        throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+      }
+      throw new HttpException(
+        'Something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async getAuthenticatedUser(email: string, password: string) {
     const user = await this.usersService.findOneByEmail(email);
 
@@ -74,11 +135,20 @@ export class AuthService {
     return await bcrypt.hash(password, +salt);
   }
 
-  generateAccessToken(payload) {
+  private generateAccessToken(payload) {
     return this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_SECRET'),
       expiresIn: this.configService.get<string>(
         'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      ),
+    });
+  }
+
+  private generateResetPasswordToken(payload) {
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('JWT_SECRET'),
+      expiresIn: this.configService.get<string>(
+        'JWT_RESET_PASSWORD_TOKEN_EXPIRATION_TIME',
       ),
     });
   }

@@ -25,9 +25,6 @@ export class UsersService {
     const user = await this.usersRepository.findOneBy({
       id,
     });
-    if (!user) {
-      throw new NotFoundException('user not found');
-    }
 
     return user;
   }
@@ -63,5 +60,31 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
     return this.usersRepository.remove(user);
+  }
+
+  async updatePassword(id: number, newHashPassword: string) {
+    const updatedUser = await this.findOneById(id);
+    updatedUser.password = newHashPassword;
+
+    await this.usersRepository.save(updatedUser);
+  }
+
+  async setResetToken(id: number, resetToken: string | null) {
+    return await this.usersRepository.update(
+      {
+        id,
+      },
+      {
+        resetToken,
+      },
+    );
+  }
+
+  async findResetToken(id: number) {
+    const user = await this.usersRepository.findOneBy({
+      id,
+    });
+
+    return user.resetToken;
   }
 }

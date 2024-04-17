@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Ward } from './wards.entity';
+import { IsOptional } from 'class-validator';
 
 export enum Gender {
   MALE = 'M',
@@ -30,6 +31,10 @@ export class Users {
     enum: Gender,
   })
   gender: string;
+
+  @Column({ nullable: true })
+  @IsOptional()
+  resetToken: string;
 
   @Column()
   citizenId: string;
