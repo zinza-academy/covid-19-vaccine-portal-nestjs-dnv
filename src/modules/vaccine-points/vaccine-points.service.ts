@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VaccinePoints } from 'src/entities/vaccine-points.entity';
 import { Like, Repository } from 'typeorm';
@@ -39,6 +39,26 @@ export class VaccinePointsService {
         },
       },
     });
+  }
+
+  async findOneById(id: number) {
+    const vaccinePoint = await this.vaccinePointRepository.findOne({
+      relations: {
+        ward: {
+          district: {
+            province: true,
+          },
+        },
+      },
+      where: {
+        id,
+      },
+    });
+    if (!vaccinePoint) {
+      throw new NotFoundException(`vaccine point with id: ${id} not found`);
+    }
+
+    return vaccinePoint;
   }
 
   async addFakeVaccinePoints(

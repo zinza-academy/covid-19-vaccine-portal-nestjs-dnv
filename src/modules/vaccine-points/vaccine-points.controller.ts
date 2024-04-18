@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   UsePipes,
@@ -20,6 +21,11 @@ export class VaccinePointsController {
     @Query() findVaccinationPointParams: FindVaccinationPointsDto,
   ) {
     return this.vaccinePointsService.findAll(findVaccinationPointParams);
+  }
+
+  @Get(':id')
+  async getOneVaccinePoints(@Param('id') id: number) {
+    return this.vaccinePointsService.findOneById(id);
   }
 
   @Post()
