@@ -16,7 +16,4 @@ export class District {
 
   @OneToMany(() => Ward, (ward) => ward.district)
   wards: Ward[];
-
-  @OneToMany(() => VaccinePoints, (vaccinePoint) => vaccinePoint.district)
-  vaccinePoints: VaccinePoints[];
 }

@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { District } from './districts.entity';
+import { Ward } from './wards.entity';
 
 @Entity()
 export class VaccinePoints {
@@ -12,8 +13,8 @@ export class VaccinePoints {
   @Column()
   address: string;
 
-  @ManyToOne(() => District, (district) => district.vaccinePoints)
-  district: District;
+  @ManyToOne(() => Ward, (ward) => ward.vaccinePoints)
+  ward: Ward;
 
   @Column()
   manager: string;
