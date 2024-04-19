@@ -30,8 +30,13 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string) {
-    const user = this.usersRepository.findOneBy({
-      email,
+    const user = this.usersRepository.findOne({
+      where: {
+        email,
+      },
+      relations: {
+        role: true,
+      },
     });
 
     return user;
