@@ -1,10 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VaccinePoints } from 'src/entities/vaccine-points.entity';
 import { Like, Repository } from 'typeorm';
 import { CreateSampleVaccinePointDto } from './addSamplePoint.dto';
 import { FindVaccinationPointsDto } from './dto/FindVaccinationPoints.dto';
 import { CreateVaccinePointDto } from './dto/create-vaccine-point.dto';
+import { UpdateVaccinePointDto } from './dto/update-vaccine-point.dto';
 
 @Injectable()
 export class VaccinePointsService {
@@ -60,6 +65,28 @@ export class VaccinePointsService {
     }
 
     return vaccinePoint;
+  }
+
+  async updateOne(id: number, updateVaccinePointDto: UpdateVaccinePointDto) {
+    const vaccinePoint = await this.vaccinePointRepository.findOneBy({
+      id,
+    });
+    if (!vaccinePoint) {
+      throw new NotFoundException(`vaccine point with id: ${id} not found`);
+    }
+    if (Object.keys(updateVaccinePointDto).length === 0) {
+      throw new BadRequestException('Empty update data');
+    }
+
+    await this.vaccinePointRepository.update(
+      {
+        id,
+      },
+      {
+        ...updateVaccinePointDto,
+      },
+    );
+    return { message: 'Update successful' };
   }
 
   async createOne(createVaccinePointDto: CreateVaccinePointDto) {
