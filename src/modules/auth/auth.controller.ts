@@ -23,6 +23,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @Post('login')
   async login(
     @Body() loginDto: LoginDto,
@@ -37,7 +38,6 @@ export class AuthController {
 
     return { success: true, message: 'Login successful' };
   }
-
   @Post('sign-up')
   async signUp(@Body() signUpDto: SignUpDto) {
     await this.authService.signUp(signUpDto);

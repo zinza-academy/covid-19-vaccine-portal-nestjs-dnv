@@ -19,13 +19,17 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const { id, email } = payload;
+    const {
+      id,
+      email,
+      role: { name },
+    } = payload;
     const user = await this.userService.findOneById(id);
 
     if (!user) {
       throw new UnauthorizedException('Invalid token');
     }
-    return { userId: id, email };
+    return { userId: id, email, role: name };
   }
 
   private static extractJWTFromCookie(req: Request): string | null {

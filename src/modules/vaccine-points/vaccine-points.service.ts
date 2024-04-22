@@ -4,6 +4,7 @@ import { VaccinePoints } from 'src/entities/vaccine-points.entity';
 import { Like, Repository } from 'typeorm';
 import { CreateSampleVaccinePointDto } from './addSamplePoint.dto';
 import { FindVaccinationPointsDto } from './dto/FindVaccinationPoints.dto';
+import { CreateVaccinePointDto } from './dto/create-vaccine-point.dto';
 
 @Injectable()
 export class VaccinePointsService {
@@ -59,6 +60,14 @@ export class VaccinePointsService {
     }
 
     return vaccinePoint;
+  }
+
+  async createOne(createVaccinePointDto: CreateVaccinePointDto) {
+    const vaccinePoint = await this.vaccinePointRepository.create(
+      createVaccinePointDto,
+    );
+
+    return await this.vaccinePointRepository.save(vaccinePoint);
   }
 
   async addFakeVaccinePoints(
