@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Ward } from './wards.entity';
 import { IsOptional } from 'class-validator';
+import { Roles } from './roles.entity';
 
 export enum Gender {
   MALE = 'M',
@@ -42,6 +43,6 @@ export class Users {
   @ManyToOne(() => Ward, (Ward) => Ward.users)
   ward: Ward;
 
-  @Column({ type: 'boolean', default: false })
-  isAdmin: boolean;
+  @ManyToOne(() => Roles, (roles) => roles.users)
+  role: Roles;
 }
