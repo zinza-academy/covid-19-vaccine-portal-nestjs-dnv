@@ -1,6 +1,5 @@
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsNotEmpty, IsPositive, IsString } from 'class-validator';
-import { Ward } from 'src/entities/wards.entity';
 
 export class CreateVaccinePointDto {
   @IsNotEmpty()
@@ -12,8 +11,8 @@ export class CreateVaccinePointDto {
   address: string;
 
   @IsNotEmpty()
-  @Transform((value) => parseInt(value.value))
-  ward: Ward;
+  @Type(() => Number)
+  ward_id: number;
 
   @IsNotEmpty()
   @IsString()

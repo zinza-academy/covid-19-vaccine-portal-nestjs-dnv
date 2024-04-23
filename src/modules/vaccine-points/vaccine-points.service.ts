@@ -90,10 +90,12 @@ export class VaccinePointsService {
   }
 
   async createOne(createVaccinePointDto: CreateVaccinePointDto) {
-    const vaccinePoint = await this.vaccinePointRepository.create(
-      createVaccinePointDto,
-    );
-
+    const vaccinePoint = await this.vaccinePointRepository.create({
+      ...createVaccinePointDto,
+      ward: {
+        id: createVaccinePointDto.ward_id,
+      },
+    });
     return await this.vaccinePointRepository.save(vaccinePoint);
   }
 

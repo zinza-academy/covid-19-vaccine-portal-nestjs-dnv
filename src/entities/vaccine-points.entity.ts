@@ -1,5 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { District } from './districts.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Ward } from './wards.entity';
 
 @Entity()
@@ -14,6 +19,7 @@ export class VaccinePoints {
   address: string;
 
   @ManyToOne(() => Ward, (ward) => ward.vaccinePoints)
+  @JoinColumn([{ name: 'ward_id', referencedColumnName: 'id' }])
   ward: Ward;
 
   @Column()
