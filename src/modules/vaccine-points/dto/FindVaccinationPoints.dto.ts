@@ -1,4 +1,4 @@
-import { Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { IsNotEmpty, IsOptional, IsPositive } from 'class-validator';
 
 export class FindVaccinationPointsDto {
@@ -19,11 +19,11 @@ export class FindVaccinationPointsDto {
 
   @IsNotEmpty()
   @IsPositive()
-  @Transform((value) => parseInt(value.value))
+  @Type(() => Number)
   page: number;
 
   @IsNotEmpty()
   @IsPositive()
-  @Transform((value) => parseInt(value.value))
+  @Type(() => Number)
   pageSize: number;
 }
