@@ -14,11 +14,13 @@ import { FindVaccinationPointsDto } from './dto/FindVaccinationPoints.dto';
 import { CreateVaccinePointDto } from './dto/create-vaccine-point.dto';
 import { UpdateVaccinePointDto } from './dto/update-vaccine-point.dto';
 import { VaccinePointsService } from './vaccine-points.service';
+import { Public } from '../auth/decorators/isPublic.decorator';
 
 @Controller('vaccine-points')
 export class VaccinePointsController {
   constructor(private readonly vaccinePointsService: VaccinePointsService) {}
 
+  @Public()
   @Get()
   async getVaccinePoints(
     @Query() findVaccinationPointParams: FindVaccinationPointsDto,
@@ -26,6 +28,7 @@ export class VaccinePointsController {
     return this.vaccinePointsService.findAll(findVaccinationPointParams);
   }
 
+  @Public()
   @Get(':id')
   async getOneVaccinePoints(@Param('id') id: number) {
     return this.vaccinePointsService.findOneById(id);
@@ -48,6 +51,7 @@ export class VaccinePointsController {
     return await this.vaccinePointsService.updateOne(id, updateVaccinePointDto);
   }
 
+  @Public()
   @Post()
   async addSampleVaccinePoints(
     @Body() createSampleVaccinePointDto: CreateSampleVaccinePointDto[],
