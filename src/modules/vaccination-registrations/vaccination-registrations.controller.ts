@@ -1,9 +1,20 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { User } from '../auth/decorators/user.decorator';
 import { IUser } from '../auth/interfaces';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';
 import { VaccinationRegistrationsService } from './vaccination-registrations.service';
 import { FindVaccinationRegistrationsDto } from './dto/findVaccinationRegistration.dto';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/enums/role.enum';
+import { UpdateVaccineRegistrationDto } from './dto/update-vaccine-registration.dto';
 
 @Controller('vaccination-registrations')
 export class VaccinationRegistrationsController {
@@ -38,5 +49,17 @@ export class VaccinationRegistrationsController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.vaccineRegistrationService.findOne(id);
+  }
+
+  @Roles(Role.Admin)
+  @Patch(':id')
+  async updateVaccinationRegistration(
+    @Param('id') id: number,
+    @Body() updateVaccineRegistrationDto: UpdateVaccineRegistrationDto,
+  ) {
+    return this.vaccineRegistrationService.updateOne(
+      id,
+      updateVaccineRegistrationDto,
+    );
   }
 }

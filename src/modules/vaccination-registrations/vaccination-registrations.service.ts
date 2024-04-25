@@ -10,6 +10,7 @@ import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.
 import { IUser } from '../auth/interfaces';
 import { Role } from '../auth/enums/role.enum';
 import { FindVaccinationRegistrationsDto } from './dto/findVaccinationRegistration.dto';
+import { UpdateVaccineRegistrationDto } from './dto/update-vaccine-registration.dto';
 
 @Injectable()
 export class VaccinationRegistrationsService {
@@ -40,7 +41,12 @@ export class VaccinationRegistrationsService {
   }
 
   async findAll(user: IUser, findQuery: FindVaccinationRegistrationsDto) {
-    const { page, pageSize, health_insurance_number, job } = findQuery;
+    const {
+      page,
+      pageSize,
+      health_insurance_number = '',
+      job = '',
+    } = findQuery;
 
     if (user.role === Role.Admin) {
       return this.vaccineRegistrationRepository.find({
@@ -78,5 +84,33 @@ export class VaccinationRegistrationsService {
     }
 
     return vaccineRegistration;
+  }
+
+  async updateOne(
+    id: number,
+    updateVaccineRegistrationDto: UpdateVaccineRegistrationDto,
+  ) {
+    const vaccineRegistration =
+      await this.vaccineRegistrationRepository.findOneBy({
+        id,
+      });
+    if (!vaccineRegistration) {
+      throw new NotFoundException(`vaccine registration not found`);
+    }
+
+    const { user_id, ...vaccineRegistrationWithoutId } =
+      updateVaccineRegistrationDto;
+    await this.vaccineRegistrationRepository.update(
+      {
+        id,
+      },
+      {
+        ...vaccineRegistrationWithoutId,
+        user: {
+          id: user_id,
+        },
+      },
+    );
+    return { message: 'Update successful' };
   }
 }
