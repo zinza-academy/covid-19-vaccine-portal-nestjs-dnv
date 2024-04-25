@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VaccineRegistrations } from 'src/entities/vaccine-registrations.entity';
 import { Like, Repository } from 'typeorm';
@@ -61,5 +65,18 @@ export class VaccinationRegistrationsService {
         user: true,
       },
     });
+  }
+
+  async findOne(id: number) {
+    const vaccineRegistration =
+      await this.vaccineRegistrationRepository.findOneBy({
+        id,
+      });
+
+    if (!vaccineRegistration) {
+      throw new NotFoundException('Không tìm thấy kết quả đăng ký tiêm');
+    }
+
+    return vaccineRegistration;
   }
 }

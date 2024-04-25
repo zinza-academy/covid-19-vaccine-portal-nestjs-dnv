@@ -34,4 +34,9 @@ export class VaccinationRegistrationsController {
       findVaccinationRegistrationParams,
     );
   }
+
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.vaccineRegistrationService.findOne(id);
+  }
 }
