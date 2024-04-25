@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { User } from '../auth/decorators/user.decorator';
 import { IUser } from '../auth/interfaces';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';
 import { VaccinationRegistrationsService } from './vaccination-registrations.service';
+import { FindVaccinationRegistrationsDto } from './dto/findVaccinationRegistration.dto';
 
 @Controller('vaccination-registrations')
 export class VaccinationRegistrationsController {
@@ -24,7 +25,13 @@ export class VaccinationRegistrationsController {
   }
 
   @Get()
-  findAll(@User() user: IUser) {
-    return this.vaccineRegistrationService.findAll(user);
+  findAll(
+    @Query() findVaccinationRegistrationParams: FindVaccinationRegistrationsDto,
+    @User() user: IUser,
+  ) {
+    return this.vaccineRegistrationService.findAll(
+      user,
+      findVaccinationRegistrationParams,
+    );
   }
 }
