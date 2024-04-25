@@ -1,8 +1,8 @@
-import { Body, Controller, Post, Request } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { User } from '../auth/decorators/user.decorator';
+import { IUser } from '../auth/interfaces';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';
 import { VaccinationRegistrationsService } from './vaccination-registrations.service';
-import { IUser } from '../auth/interfaces';
-import { User } from '../auth/decorators/user.decorator';
 
 @Controller('vaccination-registrations')
 export class VaccinationRegistrationsController {
@@ -21,5 +21,10 @@ export class VaccinationRegistrationsController {
       createVaccineRegistrationDto,
       +userId,
     );
+  }
+
+  @Get()
+  findAll(@User() user: IUser) {
+    return this.vaccineRegistrationService.findAll(user);
   }
 }

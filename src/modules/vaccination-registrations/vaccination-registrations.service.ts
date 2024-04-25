@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { VaccineRegistrations } from 'src/entities/vaccine-registrations.entity';
 import { Repository } from 'typeorm';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';
+import { IUser } from '../auth/interfaces';
+import { Role } from '../auth/enums/role.enum';
 
 @Injectable()
 export class VaccinationRegistrationsService {
@@ -30,5 +32,19 @@ export class VaccinationRegistrationsService {
     await this.vaccineRegistrationRepository.save(vaccineRegistration);
 
     return { msg: 'created' };
+  }
+
+  async findAll(user: IUser) {
+    if (user.role === Role.Admin) {
+      return this.vaccineRegistrationRepository.find();
+    }
+
+    return this.vaccineRegistrationRepository.find({
+      where: {
+        user: {
+          id: user.userId,
+        },
+      },
+    });
   }
 }
