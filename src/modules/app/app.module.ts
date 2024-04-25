@@ -11,6 +11,7 @@ import { VaccinePointsModule } from '../vaccine-points/vaccine-points.module';
 import { WardsModule } from '../wards/wards.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { VaccinationRegistrationsModule } from '../vaccination-registrations/vaccination-registrations.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AppService } from './app.service';
     AuthModule,
     EmailModule,
     VaccinePointsModule,
+    VaccinationRegistrationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
