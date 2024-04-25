@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { User } from '../auth/decorators/user.decorator';
 import { IUser } from '../auth/interfaces';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';

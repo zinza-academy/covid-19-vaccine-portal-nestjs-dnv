@@ -9,14 +9,13 @@ import {
 } from 'class-validator';
 
 export class CreateVaccineRegistrationDto {
-  @Type(() => Number)
-  @IsNumber()
   @IsNotEmpty()
-  priorityType: number;
+  @IsString()
+  priorityType: string;
 
-  @Type(() => Number)
-  @IsNumber()
-  job: number;
+  @IsNotEmpty()
+  @IsString()
+  job: string;
 
   @IsString()
   workplace: string;
@@ -29,10 +28,9 @@ export class CreateVaccineRegistrationDto {
   @IsNotEmpty()
   appointmentDate: string;
 
-  @Type(() => Number)
-  @IsNumber()
   @IsNotEmpty()
-  desired_date: number;
+  @IsString()
+  desired_date: string;
 
   @IsNotEmpty()
   @IsString()

@@ -22,10 +22,10 @@ export class VaccineRegistrations {
   id: number;
 
   @Column()
-  priorityType: number;
+  priorityType: string;
 
   @Column()
-  job: number;
+  job: string;
 
   @Column()
   workplace: string;
@@ -34,7 +34,7 @@ export class VaccineRegistrations {
   address: string;
 
   @Column()
-  desired_date: number;
+  desired_date: string;
 
   @Column()
   health_insurance_number: string;

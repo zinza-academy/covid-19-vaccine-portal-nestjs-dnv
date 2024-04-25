@@ -47,4 +47,8 @@ export class VaccinationRegistrationsService {
       },
     });
   }
+
+  async findOne(id: number, user: IUser) {
+    return 'one';
+  }
 }
