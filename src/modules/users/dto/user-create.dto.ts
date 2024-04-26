@@ -1,11 +1,11 @@
+import { Type } from 'class-transformer';
 import {
-  IsBoolean,
   IsDateString,
   IsEmail,
   IsEnum,
   IsNotEmpty,
-  IsNumber,
   IsNumberString,
+  IsPositive,
   IsString,
   MaxLength,
   MinLength,
@@ -38,9 +38,7 @@ export class CreateUserDto {
   gender: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  ward: number;
-
-  @IsBoolean()
-  isAdmin: boolean;
+  @Type(() => Number)
+  @IsPositive()
+  ward_id: number;
 }

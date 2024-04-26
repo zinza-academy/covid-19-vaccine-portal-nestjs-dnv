@@ -66,15 +66,31 @@ export class UsersService {
     return user;
   }
 
-  async updateOne(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.usersRepository.findOneBy({
-      id,
-    });
+  async updateOne(
+    id: number,
+    updateUserDto: UpdateUserDto,
+    currentUser: IUser,
+  ) {
+    const user = await this.usersRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    return 'update user';
+    if (currentUser.role !== Role.Admin && currentUser.userId !== id) {
+      throw new BadRequestException(
+        'Access denied: Users can only access their own information.',
+      );
+    }
+
+    const { ward_id, ...updateUserWithoutId } = updateUserDto;
+    const updateObject = {
+      ...updateUserWithoutId,
+      ward: ward_id ? { id: ward_id } : undefined,
+    };
+
+    await this.usersRepository.update({ id }, updateObject);
+
+    return { message: 'Update successfully' };
   }
 
   async deleteOne(id: number) {

@@ -25,8 +25,9 @@ export class UsersController {
   async updateUser(
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
+    @User() user: IUser,
   ) {
-    return this.usersService.updateOne(id, updateUserDto);
+    return this.usersService.updateOne(id, updateUserDto, user);
   }
 
   @Delete(':id')
