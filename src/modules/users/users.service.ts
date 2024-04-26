@@ -1,13 +1,14 @@
-import { SignUpDto } from '../auth/dto/signUp.dto';
 import {
-  ConflictException,
+  BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from '../../entities/users.entity';
-import { CreateUserDto } from './dto/user-create.dto';
+import { SignUpDto } from '../auth/dto/signUp.dto';
+import { Role } from '../auth/enums/role.enum';
+import { IUser } from '../auth/interfaces';
 import { UpdateUserDto } from './dto/user-update.dto';
 
 @Injectable()
@@ -19,6 +20,18 @@ export class UsersService {
 
   async findAll() {
     return this.usersRepository.find();
+  }
+
+  async findOne(id: number, currentUser: IUser) {
+    if (currentUser.role === Role.Admin) {
+      return this.usersRepository.findOne({ where: { id } });
+    }
+    if (currentUser.userId !== id) {
+      throw new BadRequestException(
+        'Access denied: Users can only access their own information.',
+      );
+    }
+    return this.usersRepository.findOne({ where: { id } });
   }
 
   async findOneById(id: number) {

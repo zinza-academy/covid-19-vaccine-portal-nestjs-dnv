@@ -1,16 +1,10 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Patch,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { User } from '../auth/decorators/user.decorator';
+import { Role } from '../auth/enums/role.enum';
+import { IUser } from '../auth/interfaces';
 import { UpdateUserDto } from './dto/user-update.dto';
 import { UsersService } from './users.service';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { Role } from '../auth/enums/role.enum';
 
 @Controller('users')
 export class UsersController {
@@ -23,12 +17,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: number) {
-    const user = await this.usersService.findOneById(id);
-    if (!user) {
-      throw new NotFoundException('user not found');
-    }
-    return user;
+  async getUser(@Param('id') id: number, @User() user: IUser) {
+    return this.usersService.findOne(id, user);
   }
 
   @Patch(':id')
