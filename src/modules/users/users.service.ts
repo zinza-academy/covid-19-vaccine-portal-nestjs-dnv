@@ -43,7 +43,12 @@ export class UsersService {
   }
 
   async createOne(signUpDto: SignUpDto) {
-    const user = await this.usersRepository.create(signUpDto);
+    const user = await this.usersRepository.create({
+      ...signUpDto,
+      role: {
+        id: signUpDto.role_id,
+      },
+    });
     await this.usersRepository.save(user);
     return user;
   }

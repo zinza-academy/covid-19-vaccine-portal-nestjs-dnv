@@ -50,4 +50,7 @@ export class SignUpDto {
   @IsOptional()
   @IsBoolean()
   isAdmin: boolean;
+
+  @IsOptional()
+  role_id: number;
 }

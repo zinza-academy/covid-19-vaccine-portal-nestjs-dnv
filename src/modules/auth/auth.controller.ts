@@ -38,6 +38,8 @@ export class AuthController {
 
     return { success: true, message: 'Login successful' };
   }
+
+  @Public()
   @Post('sign-up')
   async signUp(@Body() signUpDto: SignUpDto) {
     await this.authService.signUp(signUpDto);

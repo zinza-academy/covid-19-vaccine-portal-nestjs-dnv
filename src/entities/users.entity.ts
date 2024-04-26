@@ -1,7 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Ward } from './wards.entity';
 import { IsOptional } from 'class-validator';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Roles } from './roles.entity';
+import { VaccineRegistrations } from './vaccine-registrations.entity';
+import { Ward } from './wards.entity';
 
 export enum Gender {
   MALE = 'M',
@@ -45,4 +52,10 @@ export class Users {
 
   @ManyToOne(() => Roles, (roles) => roles.users)
   role: Roles;
+
+  @OneToMany(
+    () => VaccineRegistrations,
+    (vaccineRegistration) => vaccineRegistration.user,
+  )
+  vaccineRegistrations: VaccineRegistrations[];
 }
